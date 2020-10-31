@@ -206,7 +206,26 @@ export default function Demo() {
   const readQuestion = (question: string) => {
     setIsReading(true);
     let utterance = new SpeechSynthesisUtterance(question);
-    utterance.voice = synthRef.current.getVoices()[5];
+
+    if (utterance.voice === null) {
+      utterance.voice = synthRef.current
+        .getVoices()
+        .filter((voice) => voice.name === 'Google UK English Male')[0];
+    }
+    if (utterance.voice === null) {
+      utterance.voice = synthRef.current
+        .getVoices()
+        .filter(
+          (voice) =>
+            voice.name === 'Microsoft David Desktop - English (United States)'
+        )[0];
+    }
+    if (utterance.voice === null) {
+      utterance.voice = synthRef.current
+        .getVoices()
+        .filter((voice) => voice.lang === 'en-US')[0];
+    }
+
     utterance.pitch = 0.5;
     utterance.rate = 0.7;
     utterance.onend = () => setIsReading(false);
@@ -243,7 +262,7 @@ export default function Demo() {
     const answers = quizAnswers[questionIndex];
     if (answers[selectedAnswer].isCorrect) {
       const sound = new Howl({
-        src: ['success.wav'],
+        src: ['short_success.wav'],
       });
       sound.play();
       pointsRef.current += 1;
