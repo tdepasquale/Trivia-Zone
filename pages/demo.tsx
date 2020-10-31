@@ -55,7 +55,6 @@ const Answer = styled.button<{ isSelected: boolean }>`
   font-size: 1.5rem;
   background-color: #eee;
   border: 2px solid black;
-  cursor: pointer;
 
   ${(props) =>
     props.isSelected &&
@@ -72,7 +71,6 @@ const SubmitButton = styled.button`
   width: 90%;
   margin: 1em;
   padding: 1rem;
-  cursor: pointer;
   color: white;
   background-color: black;
 
@@ -89,12 +87,7 @@ const PlayButton = styled.button`
   font-size: 2rem;
   font-weight: 700;
   border-radius: 5px;
-  cursor: pointer;
   transition: color 0.5s ease-out, background-color 0.5s ease-out;
-
-  &:hover:not(:disabled) {
-    filter: brightness(1.2);
-  }
 
   &:disabled {
     color: black;
@@ -229,6 +222,11 @@ export default function Demo() {
     synthRef.current.speak(utterance);
   };
 
+  const skipReading = () => {
+    synthRef.current.cancel();
+    setIsReading(false);
+  };
+
   const DisplayQuestion = () => {
     if (gameState !== 'playing' || isReading) return null;
     const answers = quizAnswers[questionIndex];
@@ -312,6 +310,9 @@ export default function Demo() {
             </PlayButton>
             <div hidden={gameState !== 'playing'}>
               <DisplayQuestion />
+            </div>
+            <div hidden={isReading === false}>
+              <button onClick={skipReading}>Skip</button>
             </div>
             <div hidden={gameState !== 'checking answer'}>
               <RevealAnswer />
