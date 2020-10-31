@@ -9,6 +9,7 @@ const HeroContainer = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+  background-color: var(--color-blue);
 `;
 
 const Heading = styled.h1`
@@ -18,17 +19,15 @@ const Heading = styled.h1`
 const DemoButton = styled.a`
   padding: 1em 2em;
   margin: 4rem;
-  background-color: red;
-  color: #ccc;
+  background-color: var(--color-pink);
+  color: white;
   font-size: 2rem;
   font-weight: 700;
   border-radius: 5px;
-  cursor: pointer;
-  transition: color 0.5s ease-out, background-color 0.5s ease-out;
+  transition: filter 0.2s ease-out;
 
   &:hover {
-    color: red;
-    background-color: #ccc;
+    filter: brightness(1.2);
   }
 `;
 

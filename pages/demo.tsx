@@ -45,6 +45,11 @@ const Question = styled.div`
   width: 90%;
   font-size: 4rem;
   margin: 0 auto 2em;
+
+  @media screen and (max-width: 1000px) {
+    margin-top: 2em;
+    font-size: 3.5rem;
+  }
 `;
 
 const Answer = styled.button<{ isSelected: boolean }>`
@@ -77,6 +82,10 @@ const SubmitButton = styled.button`
   &:disabled {
     background-color: #ccc;
   }
+
+  @media screen and (max-width: 1000px) {
+    margin-bottom: 8rem;
+  }
 `;
 
 const PlayButton = styled.button`
@@ -93,6 +102,12 @@ const PlayButton = styled.button`
     color: black;
     background-color: #ccc;
   }
+`;
+
+const SkipButton = styled.button`
+  background-color: white;
+  color: black;
+  padding: 1rem 1.5rem;
 `;
 
 const Footer = styled.footer`
@@ -312,7 +327,7 @@ export default function Demo() {
               <DisplayQuestion />
             </div>
             <div hidden={isReading === false}>
-              <button onClick={skipReading}>Skip</button>
+              <SkipButton onClick={skipReading}>Skip</SkipButton>
             </div>
             <div hidden={gameState !== 'checking answer'}>
               <RevealAnswer />
