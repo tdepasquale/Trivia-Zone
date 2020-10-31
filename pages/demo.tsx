@@ -203,28 +203,25 @@ export default function Demo() {
     handleStart();
   };
 
+  const setVoice = (
+    preferredVoice = 'Google UK English Male'
+  ): SpeechSynthesisVoice => {
+    let voice = null;
+    voice = synthRef.current
+      .getVoices()
+      .filter((voice) => voice.name === preferredVoice)[0];
+    if (voice === null)
+      voice = synthRef.current
+        .getVoices()
+        .filter((voice) => voice.lang === 'en-US')[0];
+    return voice;
+  };
+
   const readQuestion = (question: string) => {
     setIsReading(true);
     let utterance = new SpeechSynthesisUtterance(question);
 
-    if (utterance.voice === null) {
-      utterance.voice = synthRef.current
-        .getVoices()
-        .filter((voice) => voice.name === 'Google UK English Male')[0];
-    }
-    if (utterance.voice === null) {
-      utterance.voice = synthRef.current
-        .getVoices()
-        .filter(
-          (voice) =>
-            voice.name === 'Microsoft David Desktop - English (United States)'
-        )[0];
-    }
-    if (utterance.voice === null) {
-      utterance.voice = synthRef.current
-        .getVoices()
-        .filter((voice) => voice.lang === 'en-US')[0];
-    }
+    utterance.voice = setVoice('Google UK English Male');
 
     utterance.pitch = 0.5;
     utterance.rate = 0.7;
