@@ -1,6 +1,7 @@
 :root {
   --color-blue: #45badd;
   --color-pink: #ff3482;
+  --color-success: #12b377;
 }
 html {
   box-sizing: border-box;
@@ -72,4 +73,11 @@ a:focus,
 button:focus {
   outline: none;
   border: 2px solid var(--color-pink);
+}
+
+.float-left {
+  float: left;
+}
+.float-right {
+  float: right;
 }

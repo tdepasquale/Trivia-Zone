@@ -3,6 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import questions from '../data/Apprentice_TandemFor400_Data.json';
 import { Howl } from 'howler';
+import {
+  FaCheckCircle,
+  FaArrowCircleRight,
+  FaTimesCircle,
+} from 'react-icons/fa';
 
 type quizQuestion = {
   correct: string;
@@ -52,7 +57,7 @@ const Question = styled.div`
   }
 `;
 
-const Answer = styled.button<{ isSelected: boolean }>`
+const Answer = styled.button<{ isSelected?: boolean; isCorrect?: boolean }>`
   max-width: 400px;
   width: 90%;
   margin: 1em;
@@ -65,6 +70,15 @@ const Answer = styled.button<{ isSelected: boolean }>`
     props.isSelected &&
     css`
       background-color: var(--color-pink);
+      color: white;
+      border: white 2px solid;
+      font-weight: 700;
+    `}
+
+  ${(props) =>
+    props.isCorrect &&
+    css`
+      background-color: var(--color-success);
       color: white;
       border: white 2px solid;
       font-weight: 700;
@@ -108,6 +122,8 @@ const SkipButton = styled.button`
   background-color: white;
   color: black;
   padding: 1rem 1.5rem;
+  border: 2px solid black;
+  box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.3);
 `;
 
 const Footer = styled.footer`
@@ -284,13 +300,26 @@ export default function Demo() {
         {answers.map((answer, i) => {
           if (answer.isCorrect) {
             return (
+              <Answer key={answer.text} isCorrect>
+                <FaCheckCircle className="float-left" />
+                {answer.text}
+              </Answer>
+            );
+          } else {
+            return (
               <Answer key={answer.text} isSelected={i === selectedAnswer}>
+                {i === selectedAnswer && (
+                  <FaTimesCircle className="float-left" />
+                )}
                 {answer.text}
               </Answer>
             );
           }
         })}
-        <SubmitButton onClick={nextQuestion}>Continue</SubmitButton>
+        <SubmitButton onClick={nextQuestion}>
+          Continue
+          <FaArrowCircleRight className="float-right" />
+        </SubmitButton>
       </>
     );
   };
