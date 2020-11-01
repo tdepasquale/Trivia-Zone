@@ -81,3 +81,8 @@ button:focus {
 .float-right {
   float: right;
 }
+
+.twitter-btn {
+  color: #38a1f3;
+  font-size: 1.5rem;
+}

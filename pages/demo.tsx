@@ -7,6 +7,7 @@ import {
   FaCheckCircle,
   FaArrowCircleRight,
   FaTimesCircle,
+  FaTwitter,
 } from 'react-icons/fa';
 
 type quizQuestion = {
@@ -324,14 +325,33 @@ export default function Demo() {
     );
   };
 
+  const handleTweet = () => {
+    const tweet = `I just scored ${pointsRef.current} points on Trivia Zone!  Try it yourself at trivia-zone.vercel.com @madeintandem `;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${tweet}`;
+    window.open(twitterUrl, '_blank');
+  };
+
   const GameOver = () => {
     if (gameState !== 'game over') return null;
+
+    const sound = new Howl({
+      src: ['success.wav'],
+    });
+    sound.play();
 
     return (
       <>
         <Question>You scored {pointsRef.current} points!</Question>
 
-        <SubmitButton onClick={playAgain}>Play Again</SubmitButton>
+        <SubmitButton onClick={playAgain}>
+          Play Again
+          <FaArrowCircleRight className="float-right" />
+        </SubmitButton>
+
+        <SubmitButton onClick={handleTweet}>
+          Tweet Score
+          <FaTwitter className="float-right twitter-btn" />
+        </SubmitButton>
       </>
     );
   };
