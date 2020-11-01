@@ -69,6 +69,10 @@ button {
   cursor: pointer;
 }
 
+button:disabled:hover {
+  cursor: default;
+}
+
 a:focus,
 button:focus {
   outline: none;

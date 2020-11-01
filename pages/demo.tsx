@@ -326,7 +326,7 @@ export default function Demo() {
   };
 
   const handleTweet = () => {
-    const tweet = `I just scored ${pointsRef.current} points on Trivia Zone!  Try it yourself at trivia-zone.vercel.com @madeintandem `;
+    const tweet = `I just scored ${pointsRef.current} points on Trivia Zone!  Try it yourself at trivia-zone.vercel.com @madeintandem`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${tweet}`;
     window.open(twitterUrl, '_blank');
   };
