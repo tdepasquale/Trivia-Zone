@@ -127,20 +127,6 @@ const SkipButton = styled.button`
   box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.3);
 `;
 
-const Footer = styled.footer`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const FooterLink = styled.a`
-  padding: 1em 2em;
-  margin: 1em;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
 export default function Demo() {
   const quizQuestionsRef = useRef<quizQuestion[]>([]);
   const [quizAnswers, setQuizAnswers] = useState<possibleAnswer[][]>([]);
@@ -387,11 +373,6 @@ export default function Demo() {
           </GameContainer>
         </Background>
       </main>
-
-      <Footer>
-        <FooterLink href="#">Terms of Use</FooterLink>
-        <FooterLink href="#">Privacy Policy</FooterLink>
-      </Footer>
     </>
   );
 }

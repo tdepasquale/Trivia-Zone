@@ -31,19 +31,6 @@ const DemoButton = styled.a`
   }
 `;
 
-const Footer = styled.footer`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const FooterLink = styled.a`
-  padding: 1em 2em;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
 export default function Home() {
   return (
     <>
@@ -63,11 +50,6 @@ export default function Home() {
           </Link>
         </HeroContainer>
       </main>
-
-      <Footer>
-        <FooterLink href="#">Terms of Use</FooterLink>
-        <FooterLink href="#">Privacy Policy</FooterLink>
-      </Footer>
     </>
   );
 }
