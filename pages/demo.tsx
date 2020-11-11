@@ -9,6 +9,11 @@ import {
   FaTimesCircle,
   FaTwitter,
 } from 'react-icons/fa';
+import {
+  startConfetti,
+  stopConfetti,
+  removeConfetti,
+} from '../Utilities/confetti';
 
 type quizQuestion = {
   correct: string;
@@ -44,6 +49,12 @@ const GameContainer = styled.div<{ isReading: boolean }>`
     background-size: cover;
     background-position: center center;
   }
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Question = styled.div`
@@ -86,7 +97,7 @@ const Answer = styled.button<{ isSelected?: boolean; isCorrect?: boolean }>`
     `}
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled.button<{ isGameOver?: boolean }>`
   max-width: 400px;
   width: 90%;
   margin: 1em;
@@ -101,6 +112,14 @@ const SubmitButton = styled.button`
   @media screen and (max-width: 1000px) {
     margin-bottom: 8rem;
   }
+
+  ${(props) =>
+    props.isGameOver &&
+    css`
+      @media screen and (max-width: 1000px) {
+        margin-bottom: 1rem;
+      }
+    `}
 `;
 
 const PlayButton = styled.button`
@@ -211,6 +230,8 @@ export default function Demo() {
   };
 
   const playAgain = () => {
+    stopConfetti();
+    removeConfetti();
     handleStart();
   };
 
@@ -325,16 +346,18 @@ export default function Demo() {
     });
     sound.play();
 
+    startConfetti();
+
     return (
       <>
         <Question>You scored {pointsRef.current} points!</Question>
 
-        <SubmitButton onClick={playAgain}>
+        <SubmitButton onClick={playAgain} isGameOver>
           Play Again
           <FaArrowCircleRight className="float-right" />
         </SubmitButton>
 
-        <SubmitButton onClick={handleTweet}>
+        <SubmitButton onClick={handleTweet} isGameOver>
           Tweet Score
           <FaTwitter className="float-right twitter-btn" />
         </SubmitButton>
@@ -358,15 +381,15 @@ export default function Demo() {
             <PlayButton onClick={handleStart} hidden={gameState !== 'menu'}>
               Play
             </PlayButton>
-            <div hidden={gameState !== 'playing'}>
+            <Container hidden={gameState !== 'playing'}>
               <DisplayQuestion />
-            </div>
+            </Container>
             <div hidden={isReading === false}>
               <SkipButton onClick={skipReading}>Skip</SkipButton>
             </div>
-            <div hidden={gameState !== 'checking answer'}>
+            <Container hidden={gameState !== 'checking answer'}>
               <RevealAnswer />
-            </div>
+            </Container>
             <div hidden={gameState !== 'game over'}>
               <GameOver />
             </div>
