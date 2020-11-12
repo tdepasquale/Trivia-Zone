@@ -230,8 +230,6 @@ export default function Demo() {
   };
 
   const playAgain = () => {
-    stopConfetti();
-    removeConfetti();
     handleStart();
   };
 
@@ -346,7 +344,13 @@ export default function Demo() {
     });
     sound.play();
 
-    startConfetti();
+    useEffect(() => {
+      startConfetti();
+      return () => {
+        stopConfetti();
+        removeConfetti();
+      };
+    }, []);
 
     return (
       <>
