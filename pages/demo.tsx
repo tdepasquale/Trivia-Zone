@@ -14,6 +14,7 @@ import {
   stopConfetti,
   removeConfetti,
 } from '../Utilities/confetti';
+import { GameOver } from '../Components/GameOver';
 
 type quizQuestion = {
   correct: string;
@@ -57,7 +58,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Question = styled.div`
+export const Question = styled.div`
   max-width: 800px;
   width: 90%;
   font-size: 4rem;
@@ -97,7 +98,7 @@ const Answer = styled.button<{ isSelected?: boolean; isCorrect?: boolean }>`
     `}
 `;
 
-const SubmitButton = styled.button<{ isGameOver?: boolean }>`
+export const SubmitButton = styled.button<{ isGameOver?: boolean }>`
   max-width: 400px;
   width: 90%;
   margin: 1em;
@@ -330,45 +331,6 @@ export default function Demo() {
     );
   };
 
-  const handleTweet = () => {
-    const tweet = `I just scored ${pointsRef.current} points on Trivia Zone!  Try it yourself at trivia-zone.vercel.com @madeintandem`;
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${tweet}`;
-    window.open(twitterUrl, '_blank');
-  };
-
-  const GameOver = () => {
-    if (gameState !== 'game over') return null;
-
-    const sound = new Howl({
-      src: ['success.wav'],
-    });
-    sound.play();
-
-    useEffect(() => {
-      startConfetti();
-      return () => {
-        stopConfetti();
-        removeConfetti();
-      };
-    }, []);
-
-    return (
-      <>
-        <Question>You scored {pointsRef.current} points!</Question>
-
-        <SubmitButton onClick={playAgain} isGameOver>
-          Play Again
-          <FaArrowCircleRight className="float-right" />
-        </SubmitButton>
-
-        <SubmitButton onClick={handleTweet} isGameOver>
-          Tweet Score
-          <FaTwitter className="float-right twitter-btn" />
-        </SubmitButton>
-      </>
-    );
-  };
-
   return (
     <>
       <Head>
@@ -394,9 +356,9 @@ export default function Demo() {
             <Container hidden={gameState !== 'checking answer'}>
               <RevealAnswer />
             </Container>
-            <div hidden={gameState !== 'game over'}>
-              <GameOver />
-            </div>
+            {gameState === 'game over' && (
+              <GameOver points={pointsRef.current} playAgain={playAgain} />
+            )}
           </GameContainer>
         </Background>
       </main>
