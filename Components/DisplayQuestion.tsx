@@ -1,6 +1,9 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Answer, Container, Question, SubmitButton } from '../pages/demo';
 import { quizAnswer } from '../types/quizAnswer';
+import { Container } from '../Shared-Styled-Components/Container';
+import { Question } from '../Shared-Styled-Components/Question';
+import { Answer } from '../Shared-Styled-Components/Answer';
+import { SubmitButton } from '../Shared-Styled-Components/SubmitButton';
 
 interface IProps {
   question: string;

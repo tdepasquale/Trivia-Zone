@@ -1,12 +1,14 @@
 import { Howl } from 'howler';
 import React, { useEffect } from 'react';
 import { FaArrowCircleRight, FaTwitter } from 'react-icons/fa';
-import { Container, Question, SubmitButton } from '../pages/demo';
 import {
   startConfetti,
   stopConfetti,
   removeConfetti,
 } from '../Utilities/confetti';
+import { Container } from '../Shared-Styled-Components/Container';
+import { Question } from '../Shared-Styled-Components/Question';
+import { SubmitButton } from '../Shared-Styled-Components/SubmitButton';
 
 interface IProps {
   points: number;
