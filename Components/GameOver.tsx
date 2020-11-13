@@ -1,7 +1,7 @@
 import { Howl } from 'howler';
 import React, { useEffect } from 'react';
 import { FaArrowCircleRight, FaTwitter } from 'react-icons/fa';
-import { Question, SubmitButton } from '../pages/demo';
+import { Container, Question, SubmitButton } from '../pages/demo';
 import {
   startConfetti,
   stopConfetti,
@@ -34,7 +34,7 @@ export const GameOver: React.FC<IProps> = ({ points, playAgain }: IProps) => {
   };
 
   return (
-    <>
+    <Container>
       <Question>You scored {points} points!</Question>
 
       <SubmitButton onClick={playAgain} isGameOver>
@@ -46,6 +46,6 @@ export const GameOver: React.FC<IProps> = ({ points, playAgain }: IProps) => {
         Tweet Score
         <FaTwitter className="float-right twitter-btn" />
       </SubmitButton>
-    </>
+    </Container>
   );
 };

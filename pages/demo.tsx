@@ -2,30 +2,10 @@ import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import questions from '../data/Apprentice_TandemFor400_Data.json';
-import { Howl } from 'howler';
-import {
-  FaCheckCircle,
-  FaArrowCircleRight,
-  FaTimesCircle,
-  FaTwitter,
-} from 'react-icons/fa';
-import {
-  startConfetti,
-  stopConfetti,
-  removeConfetti,
-} from '../Utilities/confetti';
 import { GameOver } from '../Components/GameOver';
-
-type quizQuestion = {
-  correct: string;
-  incorrect: string[];
-  question: string;
-};
-
-type possibleAnswer = {
-  text: string;
-  isCorrect: boolean;
-};
+import { RevealAnswer } from '../Components/RevealAnswer';
+import { quizQuestion } from '../types/quizQuestion';
+import { quizAnswer } from '../types/quizAnswer';
 
 const Background = styled.div`
   background-color: var(--color-blue);
@@ -33,6 +13,7 @@ const Background = styled.div`
 
 const GameContainer = styled.div<{ isReading: boolean }>`
   min-height: 100vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -52,7 +33,7 @@ const GameContainer = styled.div<{ isReading: boolean }>`
   }
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,7 +51,10 @@ export const Question = styled.div`
   }
 `;
 
-const Answer = styled.button<{ isSelected?: boolean; isCorrect?: boolean }>`
+export const Answer = styled.button<{
+  isSelected?: boolean;
+  isCorrect?: boolean;
+}>`
   max-width: 400px;
   width: 90%;
   margin: 1em;
@@ -149,7 +133,7 @@ const SkipButton = styled.button`
 
 export default function Demo() {
   const quizQuestionsRef = useRef<quizQuestion[]>([]);
-  const [quizAnswers, setQuizAnswers] = useState<possibleAnswer[][]>([]);
+  const [quizAnswers, setQuizAnswers] = useState<quizAnswer[][]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [questionIndex, setQuestionIndex] = useState(0);
   const synthRef = useRef<SpeechSynthesis | null>(null);
@@ -188,18 +172,15 @@ export default function Demo() {
     quizQuestionsRef.current = selectedQuestions;
   };
 
-  const randomizer = (
-    answer1: possibleAnswer,
-    answer2: possibleAnswer
-  ): number => {
+  const randomizer = (answer1: quizAnswer, answer2: quizAnswer): number => {
     return 0.5 - Math.random();
   };
 
   const randomizeAnswers = () => {
-    const randomizedAnswers: possibleAnswer[][] = [];
+    const randomizedAnswers: quizAnswer[][] = [];
 
     quizQuestionsRef.current.forEach((question) => {
-      const answers: possibleAnswer[] = [
+      const answers: quizAnswer[] = [
         { text: question.correct, isCorrect: true },
       ];
       question.incorrect.forEach((answer) =>
@@ -290,45 +271,8 @@ export default function Demo() {
     );
   };
 
-  const RevealAnswer = () => {
-    if (gameState !== 'checking answer') return null;
-    const answers = quizAnswers[questionIndex];
-    if (answers[selectedAnswer].isCorrect) {
-      const sound = new Howl({
-        src: ['short_success.wav'],
-      });
-      sound.play();
-      pointsRef.current += 1;
-    }
-
-    return (
-      <>
-        <Question>{quizQuestionsRef.current[questionIndex]?.question}</Question>
-        {answers.map((answer, i) => {
-          if (answer.isCorrect) {
-            return (
-              <Answer key={answer.text} isCorrect>
-                <FaCheckCircle className="float-left" />
-                {answer.text}
-              </Answer>
-            );
-          } else {
-            return (
-              <Answer key={answer.text} isSelected={i === selectedAnswer}>
-                {i === selectedAnswer && (
-                  <FaTimesCircle className="float-left" />
-                )}
-                {answer.text}
-              </Answer>
-            );
-          }
-        })}
-        <SubmitButton onClick={nextQuestion}>
-          Continue
-          <FaArrowCircleRight className="float-right" />
-        </SubmitButton>
-      </>
-    );
+  const handleIncrementPoints = () => {
+    pointsRef.current += 1;
   };
 
   return (
@@ -344,18 +288,24 @@ export default function Demo() {
       <main>
         <Background>
           <GameContainer isReading={isReading}>
-            <PlayButton onClick={handleStart} hidden={gameState !== 'menu'}>
-              Play
-            </PlayButton>
+            {gameState === 'menu' && (
+              <PlayButton onClick={handleStart}>Play</PlayButton>
+            )}
             <Container hidden={gameState !== 'playing'}>
               <DisplayQuestion />
             </Container>
             <div hidden={isReading === false}>
               <SkipButton onClick={skipReading}>Skip</SkipButton>
             </div>
-            <Container hidden={gameState !== 'checking answer'}>
-              <RevealAnswer />
-            </Container>
+            {gameState === 'checking answer' && (
+              <RevealAnswer
+                answers={quizAnswers[questionIndex]}
+                question={quizQuestionsRef.current[questionIndex]?.question}
+                incrementPoints={handleIncrementPoints}
+                selectedAnswer={selectedAnswer}
+                nextQuestion={nextQuestion}
+              />
+            )}
             {gameState === 'game over' && (
               <GameOver points={pointsRef.current} playAgain={playAgain} />
             )}
