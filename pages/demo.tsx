@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import questions from '../data/Apprentice_TandemFor400_Data.json';
 import { GameOver } from '../Components/GameOver';
+import { DisplayQuestion } from '../Components/DisplayQuestion';
 import { RevealAnswer } from '../Components/RevealAnswer';
 import { quizQuestion } from '../types/quizQuestion';
 import { quizAnswer } from '../types/quizAnswer';
@@ -246,31 +247,6 @@ export default function Demo() {
     setIsReading(false);
   };
 
-  const DisplayQuestion = () => {
-    if (gameState !== 'playing' || isReading) return null;
-    const answers = quizAnswers[questionIndex];
-
-    return (
-      <>
-        <Question>{quizQuestionsRef.current[questionIndex]?.question}</Question>
-        {answers.map((answer, i) => {
-          return (
-            <Answer
-              key={answer.text}
-              onClick={() => setSelectedAnswer(i)}
-              isSelected={i === selectedAnswer}
-            >
-              {answer.text}
-            </Answer>
-          );
-        })}
-        <SubmitButton onClick={checkAnswer} disabled={selectedAnswer === null}>
-          Submit
-        </SubmitButton>
-      </>
-    );
-  };
-
   const handleIncrementPoints = () => {
     pointsRef.current += 1;
   };
@@ -291,12 +267,18 @@ export default function Demo() {
             {gameState === 'menu' && (
               <PlayButton onClick={handleStart}>Play</PlayButton>
             )}
-            <Container hidden={gameState !== 'playing'}>
-              <DisplayQuestion />
-            </Container>
-            <div hidden={isReading === false}>
+            {gameState === 'playing' && !isReading && (
+              <DisplayQuestion
+                question={quizQuestionsRef.current[questionIndex]?.question}
+                answers={quizAnswers[questionIndex]}
+                selectedAnswer={selectedAnswer}
+                setSelectedAnswer={setSelectedAnswer}
+                checkAnswer={checkAnswer}
+              />
+            )}
+            {isReading === true && (
               <SkipButton onClick={skipReading}>Skip</SkipButton>
-            </div>
+            )}
             {gameState === 'checking answer' && (
               <RevealAnswer
                 answers={quizAnswers[questionIndex]}
